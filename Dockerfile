@@ -14,12 +14,14 @@ RUN apt-get upgrade -y
 RUN apt-get install -y curl apt-utils fakeroot
 
 # MongoDB
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+#RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 # it may fails due to timeout
+RUN cd /tmp && curl -O http://docs.mongodb.org/10gen-gpg-key.asc && apt-key add 10gen-gpg-key.asc
 RUN echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' > /etc/apt/sources.list.d/mongodb.list
-RUN apt-get update && apt-get install -y mongodb-10gen
+RUN apt-get update && apt-get install -y mongodb-10gen=2.4.8
 
 # Nginx
 RUN cd /tmp && curl -O http://nginx.org/keys/nginx_signing.key && apt-key add nginx_signing.key
+RUN echo 'deb http://nginx.org/packages/ubuntu/ precise nginx' > /etc/apt/sources.list.d/nginx.list
 RUN apt-get update && apt-get install -y nginx
 
 # Redis
